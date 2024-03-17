@@ -12,7 +12,7 @@ export default function ProductInfoForm() {
   return (
     <div className="max-w-2xl mx-auto p-10 bg-white rounded-2xl shadow-lg min-w-[600px] min-h-[390px]">
       <h1 className="text-3xl font-bold mb-8">Fill out the box</h1>
-      <div className="space-y-6">
+      <div className="space-y-6 mb-8">
         <div>
           <label className="font-semibold mb-2" htmlFor="timeline">
             Timeline
@@ -40,7 +40,7 @@ export default function ProductInfoForm() {
           </div>
         </div>
       </div>
-      <div className="flex justify-between mt-8">
+      <div className="flex justify-between">
         <Button variant="outline">Go Back</Button>
         <Button>Go Next</Button>
       </div>

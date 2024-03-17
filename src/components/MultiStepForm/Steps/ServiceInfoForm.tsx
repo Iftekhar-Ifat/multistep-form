@@ -1,7 +1,7 @@
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Textarea } from "../ui/textarea";
+import { Button } from "../../ui/button";
+import { Label } from "../../ui/label";
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
+import { Textarea } from "../../ui/textarea";
 
 export default function ServiceInfoForm() {
   return (
@@ -33,7 +33,7 @@ export default function ServiceInfoForm() {
         </div>
         <div className="flex justify-between">
           <Button variant="outline">Go Back</Button>
-          <Button>Send Message</Button>
+          <Button>Go Next</Button>
         </div>
       </form>
     </div>
