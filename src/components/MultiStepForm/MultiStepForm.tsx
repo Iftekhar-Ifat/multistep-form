@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import { RootState } from "@/store/store";
 import PersonalInfoForm from "./Steps/PersonalInfoForm";
 import ProductInfoForm from "./Steps/ProductInfoForm";
 import ServiceInfoForm from "./Steps/ServiceInfoForm";
-import { CurrentFormType, currentForm } from "@/types/form.types";
+import { useSelector } from "react-redux";
 
 export default function MultiStepForm() {
-  const [currentForm, setCurrentForm] = useState(1);
+  const currentForm = useSelector(
+    (state: RootState) => state.currentForm.value
+  );
+
   return (
     <div>
       {currentForm === 1 ? (

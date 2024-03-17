@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./slice";
+import formNavigationSlice from "./form-navigation/formNavigationSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      counter: counterReducer,
+      currentForm: formNavigationSlice,
     },
   });
 };

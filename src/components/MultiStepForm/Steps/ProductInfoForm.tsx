@@ -7,8 +7,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import {
+  nextStep,
+  previousStep,
+} from "@/store/form-navigation/formNavigationSlice";
 
 export default function ProductInfoForm() {
+  const dispatch = useDispatch();
   return (
     <div className="max-w-2xl mx-auto p-10 bg-white rounded-2xl shadow-lg min-w-[600px] min-h-[390px]">
       <h1 className="text-3xl font-bold mb-8">Fill out the box</h1>
@@ -41,8 +47,10 @@ export default function ProductInfoForm() {
         </div>
       </div>
       <div className="flex justify-between">
-        <Button variant="outline">Go Back</Button>
-        <Button>Go Next</Button>
+        <Button onClick={() => dispatch(previousStep())} variant="outline">
+          Go Back
+        </Button>
+        <Button onClick={() => dispatch(nextStep())}>Go Next</Button>
       </div>
     </div>
   );

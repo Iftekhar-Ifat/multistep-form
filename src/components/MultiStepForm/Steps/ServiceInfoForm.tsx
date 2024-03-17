@@ -1,9 +1,12 @@
+import { useDispatch } from "react-redux";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { Textarea } from "../../ui/textarea";
+import { previousStep } from "@/store/form-navigation/formNavigationSlice";
 
 export default function ServiceInfoForm() {
+  const dispatch = useDispatch();
   return (
     <div className="max-w-2xl mx-auto p-10 bg-white rounded-2xl shadow-lg min-w-[600px]">
       <h2 className="text-3xl font-bold mb-8">Fill out the box</h2>
@@ -32,8 +35,10 @@ export default function ServiceInfoForm() {
           <Textarea placeholder="Write your message ..." />
         </div>
         <div className="flex justify-between">
-          <Button variant="outline">Go Back</Button>
-          <Button>Go Next</Button>
+          <Button onClick={() => dispatch(previousStep())} variant="outline">
+            Go Back
+          </Button>
+          <Button onClick={(e) => e.preventDefault()}>Send Message</Button>
         </div>
       </form>
     </div>
