@@ -1,3 +1,9 @@
+"use client";
+
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   SelectValue,
   SelectTrigger,
@@ -12,46 +18,134 @@ import {
   nextStep,
   previousStep,
 } from "@/store/form-navigation/formNavigationSlice";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  ProductInfoFormSchema,
+  TProductInfoFormSchema,
+} from "@/validation/form-validation";
 
 export default function ProductInfoForm() {
   const dispatch = useDispatch();
+  const form = useForm<TProductInfoFormSchema>({
+    resolver: zodResolver(ProductInfoFormSchema),
+  });
+
+  const [allProducts, setAllProducts] = useState<string[]>([]);
+
+  const handleAddProduct = (value: string) => {
+    if (!value) {
+      form.setError("products", {
+        type: "custom",
+        message: "Cannot add empty products",
+      });
+    } else {
+      form.clearErrors("products");
+      setAllProducts([...allProducts, value]);
+    }
+  };
+
+  const onSubmit = (data: TProductInfoFormSchema) => {
+    const formData = {
+      timeline: data.timeline,
+      products: allProducts,
+    };
+    console.log(formData);
+    dispatch(nextStep());
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-10 bg-white rounded-2xl shadow-lg min-w-[600px] min-h-[390px]">
       <h1 className="text-3xl font-bold mb-8">Fill out the box</h1>
-      <div className="space-y-6 mb-8">
-        <div>
-          <label className="font-semibold mb-2" htmlFor="timeline">
-            Timeline
-          </label>
-          <Select>
-            <SelectTrigger id="timeline">
-              <SelectValue placeholder="Within 1 week" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              <SelectItem value="1week">Within 1 week</SelectItem>
-              <SelectItem value="2weeks">Within 2 weeks</SelectItem>
-              <SelectItem value="1month">Within 1 month</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <label className="font-semibold mb-2" htmlFor="product">
-            Product
-          </label>
-          <div className="flex items-center">
-            <Input className="flex-1" id="product" placeholder="2 items" />
-            <Button className="ml-2" variant="secondary">
-              <PlusIcon className="w-5 h-5" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="timeline"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Timeline</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a timeline" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="within-1-week">Within 1 week</SelectItem>
+                    <SelectItem value="within-2-week">
+                      Within 2 weeks
+                    </SelectItem>
+                    <SelectItem value="within-1-month">
+                      Within 1 month
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="products"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-semibold mb-2" htmlFor="products">
+                  Product
+                </FormLabel>
+                <div className="flex items-center">
+                  <FormControl>
+                    <Input
+                      className="flex-1"
+                      id="products"
+                      placeholder="Enter product"
+                      {...field}
+                    />
+                  </FormControl>
+                  <Button
+                    type="button"
+                    className="ml-2"
+                    variant="secondary"
+                    size="icon"
+                    onClick={(event) => {
+                      event.preventDefault(), handleAddProduct(field.value);
+                    }}
+                  >
+                    <PlusIcon />
+                  </Button>
+                </div>
+                <FormMessage />
+                <div>
+                  <h2 className="text-lg font-semibold mb-4">Products:</h2>
+                  {!allProducts.length ? (
+                    <span className="text-red-500">No products added</span>
+                  ) : null}
+                  <ul>
+                    {allProducts.map((product, index) => (
+                      <li key={index}>{product}</li>
+                    ))}
+                  </ul>
+                </div>
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between mt-4">
+            <Button onClick={() => dispatch(previousStep())} variant="outline">
+              Go Back
             </Button>
+            <Button type="submit">Go Next</Button>
           </div>
-        </div>
-      </div>
-      <div className="flex justify-between">
-        <Button onClick={() => dispatch(previousStep())} variant="outline">
-          Go Back
-        </Button>
-        <Button onClick={() => dispatch(nextStep())}>Go Next</Button>
-      </div>
+        </form>
+      </Form>
     </div>
   );
 }
