@@ -28,14 +28,9 @@ const formDataSlice = createSlice({
     updateServiceInfo: (state, action) => {
       state.serviceInfo = action.payload;
     },
-    getFormInfo: (state) => state,
   },
 });
 
-export const {
-  updatePersonalInfo,
-  updateProductInfo,
-  updateServiceInfo,
-  getFormInfo,
-} = formDataSlice.actions;
+export const { updatePersonalInfo, updateProductInfo, updateServiceInfo } =
+  formDataSlice.actions;
 export default formDataSlice.reducer;

@@ -33,7 +33,6 @@ export default function PersonalInfoForm() {
   });
 
   const onSubmit = (data: TPersonalInfoFormSchema) => {
-    console.log(data);
     dispatch(updatePersonalInfo(data));
     dispatch(nextStep());
   };

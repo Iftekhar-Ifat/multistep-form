@@ -42,8 +42,6 @@ export default function ProductInfoForm() {
     defaultValues: { timeline: formData.timeline },
   });
 
-  console.log(formData);
-
   const [allProducts, setAllProducts] = useState<string[]>(
     formData.products || []
   );

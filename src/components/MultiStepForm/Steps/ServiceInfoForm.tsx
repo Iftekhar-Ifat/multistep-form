@@ -20,24 +20,21 @@ import {
   TServiceInfoFormSchema,
 } from "@/validation/form-validation";
 import { RootState } from "@/store/store";
-import { getFormInfo, updateServiceInfo } from "@/store/form-data/formSlice";
+import { updateServiceInfo } from "@/store/form-data/formSlice";
 import { useRouter } from "next/navigation";
 
 export default function ServiceInfoForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const formData = useSelector(
-    (state: RootState) => state.formData.serviceInfo
-  );
+  const formData = useSelector((state: RootState) => state.formData);
 
   const form = useForm<TServiceInfoFormSchema>({
     resolver: zodResolver(ServiceInfoFormSchema),
-    defaultValues: formData,
+    defaultValues: formData.serviceInfo,
   });
 
   const onSubmit = (data: TServiceInfoFormSchema) => {
     dispatch(updateServiceInfo(data));
-
     router.push("/confirm");
   };
 
