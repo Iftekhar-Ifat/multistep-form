@@ -1,6 +1,6 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { Textarea } from "../../ui/textarea";
@@ -19,17 +19,26 @@ import {
   ServiceInfoFormSchema,
   TServiceInfoFormSchema,
 } from "@/validation/form-validation";
+import { RootState } from "@/store/store";
+import { getFormInfo, updateServiceInfo } from "@/store/form-data/formSlice";
+import { useRouter } from "next/navigation";
 
 export default function ServiceInfoForm() {
+  const router = useRouter();
   const dispatch = useDispatch();
+  const formData = useSelector(
+    (state: RootState) => state.formData.serviceInfo
+  );
 
   const form = useForm<TServiceInfoFormSchema>({
     resolver: zodResolver(ServiceInfoFormSchema),
+    defaultValues: formData,
   });
 
   const onSubmit = (data: TServiceInfoFormSchema) => {
-    // Handle form submission
-    console.log(data);
+    dispatch(updateServiceInfo(data));
+
+    router.push("/confirm");
   };
 
   return (

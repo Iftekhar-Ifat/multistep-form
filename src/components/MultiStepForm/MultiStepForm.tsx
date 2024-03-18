@@ -10,7 +10,6 @@ export default function MultiStepForm() {
   const currentForm = useSelector(
     (state: RootState) => state.currentForm.value
   );
-
   return (
     <div>
       {currentForm === 1 ? (

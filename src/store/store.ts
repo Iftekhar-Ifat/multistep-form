@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import formNavigationSlice from "./form-navigation/formNavigationSlice";
+import formDataSlice from "./form-data/formSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       currentForm: formNavigationSlice,
+      formData: formDataSlice,
     },
   });
 };
 
-// Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];

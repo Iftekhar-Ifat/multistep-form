@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   SelectValue,
   SelectTrigger,
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   nextStep,
   previousStep,
@@ -30,16 +29,26 @@ import {
   ProductInfoFormSchema,
   TProductInfoFormSchema,
 } from "@/validation/form-validation";
+import { RootState } from "@/store/store";
+import { updateProductInfo } from "@/store/form-data/formSlice";
 
 export default function ProductInfoForm() {
   const dispatch = useDispatch();
+  const formData = useSelector(
+    (state: RootState) => state.formData.productInfo
+  );
   const form = useForm<TProductInfoFormSchema>({
     resolver: zodResolver(ProductInfoFormSchema),
+    defaultValues: { timeline: formData.timeline },
   });
 
-  const [allProducts, setAllProducts] = useState<string[]>([]);
+  console.log(formData);
 
-  const handleAddProduct = (value: string) => {
+  const [allProducts, setAllProducts] = useState<string[]>(
+    formData.products || []
+  );
+
+  const handleAddProduct = (value: string | undefined) => {
     if (!value) {
       form.setError("products", {
         type: "custom",
@@ -52,12 +61,19 @@ export default function ProductInfoForm() {
   };
 
   const onSubmit = (data: TProductInfoFormSchema) => {
-    const formData = {
-      timeline: data.timeline,
-      products: allProducts,
-    };
-    console.log(formData);
-    dispatch(nextStep());
+    if (allProducts.length === 0) {
+      form.setError("products", {
+        type: "custom",
+        message: "Cannot add empty products",
+      });
+    } else {
+      const productFormData = {
+        timeline: data.timeline,
+        products: allProducts,
+      };
+      dispatch(updateProductInfo(productFormData));
+      dispatch(nextStep());
+    }
   };
 
   return (

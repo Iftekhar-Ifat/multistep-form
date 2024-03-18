@@ -19,7 +19,7 @@ export const ProductInfoFormSchema = z.object({
   timeline: z.string({
     required_error: "Please select a timeline.",
   }),
-  products: z.string(),
+  products: z.string().optional(),
 });
 
 export const ServiceInfoFormSchema = z.object({

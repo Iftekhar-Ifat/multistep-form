@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { nextStep } from "@/store/form-navigation/formNavigationSlice";
 import {
   PersonalInfoFormSchema,
@@ -18,15 +18,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { updatePersonalInfo } from "@/store/form-data/formSlice";
+import { RootState } from "@/store/store";
 
 export default function PersonalInfoForm() {
   const dispatch = useDispatch();
+  const formData = useSelector(
+    (state: RootState) => state.formData.personalInfo
+  );
+
   const form = useForm<TPersonalInfoFormSchema>({
     resolver: zodResolver(PersonalInfoFormSchema),
+    defaultValues: formData,
   });
 
   const onSubmit = (data: TPersonalInfoFormSchema) => {
     console.log(data);
+    dispatch(updatePersonalInfo(data));
     dispatch(nextStep());
   };
 
